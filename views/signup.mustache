@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+a:hover:not(.active) {
+    background-color: #111;
+}
+
+.active {
+background-color:#4CAF50;
+}
+</style>
+<title>Sign Up | Gabble</title>
+<link rel="shortcut icon" href="favicon.ico" />
+</head>
+<body>
+
+<ul>
+  <li><a href="home">Home</a></li>
+  <li><a href="create">Create a new gab</a></li>
+  <li><a href="login">Log in</a></li>
+  <li><a class="active" href="signup">Sign up</a></li>
+</ul>
+
+
+<div class="signupform">
+<h2>Sign up</h2>
+<br>
+<form>
+<label for="username">Username</label><br>
+<input type="text" id="username"><br>
+<label for="password">Password</label><br>
+<input type="text" id="password"><br>
+<label for="password-confirmation">Password confirmation</label><br>
+<input type="text" id="password-confirmation"><br>
+<br>
+<button type="submit">Sign up</button>
+</form>
+</div>
+
+</body>
+</html>
