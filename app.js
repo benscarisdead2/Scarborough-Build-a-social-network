@@ -7,13 +7,25 @@ const bodyParser = require("body-parser");
 const expressValidator = require("express-validator");
 const morgan = require("morgan");
 const routes = require("./routes/router.js");
+const models = require("./models")
 
+//start app
 const app = express();
 
+const john = models.users.build({
+    name: 'john',
+    password: 'password'
+})
+
+john.save().then(function (newUser) {
+    console.log(newUser)
+})
+
+
 app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
 }))
 
 app.engine('mustache', mustacheExpress());
@@ -22,7 +34,7 @@ app.set('view engine', 'mustache')
 // app.set('layout', 'layout');
 app.use('/static', express.static('static'));
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 app.use(morgan('dev'))
 

@@ -18,6 +18,8 @@
     "mustache": "^2.3.0",
     "mustache-express": "^1.2.5",
     "path": "^0.12.7",
+    "pg": "^6.4.0",
+    "sequelize": "^4.2.1",
     "session": "^0.1.0"
   }
 }
