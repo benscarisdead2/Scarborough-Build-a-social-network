@@ -1,57 +1,63 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<style>
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-}
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
 
-li {
-    float: left;
-}
+        li {
+            float: left;
+        }
 
-li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
 
-a:hover:not(.active) {
-    background-color: #111;
-}
+        a:hover:not(.active) {
+            background-color: #111;
+        }
 
-.active {
-background-color:#4CAF50;
-}
-</style>
-<title>Create new gab | Gabble</title>
-<link rel="shortcut icon" href="favicon.ico" />
+        .active {
+            background-color: #4CAF50;
+        }
+    </style>
+    <title>Create new gab | Gabble</title>
+    <link rel="shortcut icon" href="favicon.ico" />
 </head>
+
 <body>
 
-<ul>
-  <li><a href="home">Home</a></li>
-  <li><a class="active" href="create">Create a new gab</a></li>
-  <li><a href="login">Log in</a></li>
-  <li><a  href="signup">Sign up</a></li>
-</ul>
+    <ul>
+        <li><a href="home">Home</a></li>
+        <li><a class="active" href="create">Create a new gab</a></li>
+        <li><a href="login">Log in</a></li>
+        <li><a href="signup">Sign up</a></li>
+    </ul>
 
 
-<div class="signupform">
-<h2>Create a new gab</h2>
-<br>
-<form>
-    <input type="text" name = "gabtext" id="player" value="" style="width:300px; height:100px;"><br>
-    <br>
-    <button type="submit">Save gab</button>
-</form>
-</div>
+    <div class="signupform">
+        <h2>Create a new gab</h2>
+        <br>
+        <form>
+            <input action="/create" method="POST" type="text" name="gabtext" id="player" value="" style="width:300px; height:100px;"><br>
+            <br>
+            <button type="submit">Save gab</button>
+        </form>
+        {{#errors}}
+        {{.}}
+        {{/errors}}
+    </div>
 
 </body>
+
 </html>

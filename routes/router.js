@@ -3,15 +3,16 @@ const app = express();
 const router = express.Router();
 const models = require('../models');
 
-const ben = models.users.build({
-    name: 'ben',
-    password: 'hello'
-})
 
-ben.save();
+/***************************************************************
+*
+* global functions area
+*
+****************************************************************/
 
-//global functions area
 function validateUser(req, res) {
+    // this is a user defined validation routine to confirm
+    // requirements of the signup page
 
     //check to see if username meets criteria
     req.checkBody("username", "Username must be all letters, minimum 3 characters.").notEmpty().isAlpha().isLength({ min: 3, max: 20 });
@@ -38,6 +39,12 @@ function guard(req, res, next) {
         res.send("You must login to view this page...");
     }
 };
+
+/**************************************************************
+ * 
+ *  route handlers
+ * 
+**************************************************************/
 
 // define a route handler for /login
 router.get('/login', function (req, res) {
@@ -85,6 +92,7 @@ router.post('/signup', function (req, res) {
     // validate the user input
     let validateErrors = validateUser(req, res);
 
+    // if the signup validation is successful, then...
     if (!validateErrors) {
         // make sure the user that is being created does not already exist
         models.users.findOne({ where: { name: req.body.username, password: req.body.password } }).then(
@@ -109,6 +117,7 @@ router.post('/signup', function (req, res) {
             }
         );
     }
+    // validation at signup was NOT successful, so report errors and retry...
     else {
         //redirect back to signup page
         let errorMessages = [];
@@ -123,11 +132,36 @@ router.post('/signup', function (req, res) {
 // from here on we use the guard to prevent access unless
 // there is a session active
 router.get('/home', guard, function (req, res) {
+    // get the name of the logged in user and find all their gabs
+    // post all the gabs on their homepage
     res.render('home');
 });
 
 router.get('/create', guard, function (req, res) {
     res.render('create');
+});
+
+router.post('/create', function (req, res) {
+    
+    // validate form sent from create page
+    req.checkBody("gabtext", "Only 140 characters allowed.").isLength({ max: 10 });
+    var errors = req.validationErrors();
+    
+    if (!errors) {
+        // get userId from the users table for the current user
+        console.log("no errors on create");
+        // add GAB TEXT from FORM into the GAB DATABASE
+
+    } else {
+        console.log("errors on create");
+        let errorMessages = [];
+
+        errors.forEach(function (param) {
+            errorMessages.push(param.msg);
+        });
+        res.render('create', {errors: errorMessages});
+    }
+
 });
 
 router.get('/logout', function (req, res) {
