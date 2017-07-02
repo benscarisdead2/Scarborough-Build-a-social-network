@@ -46,15 +46,15 @@ background-color:#4CAF50;
 <div class="signupform">
 <h2>Sign up</h2>
 <br>
-<form>
-<label for="username">Username</label><br>
-<input type="text" id="username"><br>
-<label for="password">Password</label><br>
-<input type="text" id="password"><br>
-<label for="password-confirmation">Password confirmation</label><br>
-<input type="text" id="password-confirmation"><br>
-<br>
-<button type="submit">Sign up</button>
+<form action="/signup" method="POST">
+    <label for="username">Username</label><br>
+    <input type="text" name="username"><br>
+    <label for="password">Password</label><br>
+    <input type="password" name = "password"><br>
+    <label for="password-confirmation">Password confirmation</label><br>
+    <input type="password" name="password-confirmation"><br>
+    <br>
+    <button type="submit" name="su-submit-button">Sign up</button>
 </form>
 </div>
 
