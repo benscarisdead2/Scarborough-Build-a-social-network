@@ -2,9 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const mustacheExpress = require('mustache-express');
-
 const bodyParser = require("body-parser");
-const expressValidator = require("express-validator");
+const validator = require("express-validator");
 const morgan = require("morgan");
 const routes = require("./routes/router.js");
 const models = require("./models")
@@ -26,7 +25,7 @@ app.set('view engine', 'mustache')
 // app.use('/static', express.static('static'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(expressValidator());
+app.use(validator());
 app.use(morgan('dev'))
 
 app.use(routes);
