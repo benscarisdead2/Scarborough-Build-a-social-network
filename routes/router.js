@@ -133,8 +133,10 @@ router.post('/signup', function (req, res) {
 // there is a session active
 router.get('/home', guard, function (req, res) {
     // get the name of the logged in user and find all their gabs
-    // post all the gabs on their homepage
-    res.render('home');
+     // post all the gabs on their homepage
+    models.gabs.findAll().then(function (gabs) {
+        res.render("home", {gabs: gabs})
+    })
 });
 
 router.get('/create', guard, function (req, res) {
@@ -142,16 +144,22 @@ router.get('/create', guard, function (req, res) {
 });
 
 router.post('/create', function (req, res) {
-    
+    console.log(req.session.user.id);
     // validate form sent from create page
-    req.checkBody("gabtext", "Only 140 characters allowed.").isLength({ max: 10 });
+    req.checkBody("gabtext", "Only 140 characters allowed.").isLength({ max: 140 });
     var errors = req.validationErrors();
     
-    if (!errors) {
+    if (!errors) {        
         // get userId from the users table for the current user
         console.log("no errors on create");
         // add GAB TEXT from FORM into the GAB DATABASE
-        res.redirect('/');
+            let newGab = models.gabs.create({
+                text: req.body.gabtext,
+                userId: req.session.user.id
+            }).then(function () {
+                res.redirect('/home');                
+            });
+        
     } else {
         console.log("errors on create");
         let errorMessages = [];
