@@ -34,8 +34,8 @@ function guard(req, res, next) {
         // ... pass on to the next function
         next();
     } else {
-        // squawk loudly!
-        res.status("400");
+        // error out
+        res.status("401");
         res.send("You must login to view this page...");
     }
 };
@@ -151,7 +151,7 @@ router.post('/create', function (req, res) {
         // get userId from the users table for the current user
         console.log("no errors on create");
         // add GAB TEXT from FORM into the GAB DATABASE
-
+        res.redirect('/');
     } else {
         console.log("errors on create");
         let errorMessages = [];
