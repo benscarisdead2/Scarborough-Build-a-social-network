@@ -41,9 +41,9 @@ function guard(req, res, next) {
 };
 
 /**************************************************************
- * 
+ *
  *  route handlers
- * 
+ *
 **************************************************************/
 
 // define a route handler for /login
@@ -60,7 +60,7 @@ router.post('/login', function (req, res) {
     if (!tempUsername || !tempPassword) {
         res.status("400");
         res.send("Username and Password must both be provided.");
-        // if both fields are filled, add new user to the array and redirect   
+        // if both fields are filled, add new user to the array and redirect
     } else {
         // at this point we have data in the usr/pwd form
         // we need to determine if these are in the users Table
@@ -148,8 +148,8 @@ router.post('/create', function (req, res) {
     // validate form sent from create page
     req.checkBody("gabtext", "Only 140 characters allowed.").isLength({ max: 140 });
     var errors = req.validationErrors();
-    
-    if (!errors) {        
+
+    if (!errors) {
         // get userId from the users table for the current user
         console.log("no errors on create");
         // add GAB TEXT from FORM into the GAB DATABASE
@@ -157,9 +157,9 @@ router.post('/create', function (req, res) {
                 text: req.body.gabtext,
                 userId: req.session.user.id
             }).then(function () {
-                res.redirect('/home');                
+                res.redirect('/home');
             });
-        
+
     } else {
         console.log("errors on create");
         let errorMessages = [];
@@ -171,6 +171,27 @@ router.post('/create', function (req, res) {
     }
 
 });
+
+//LIKE FUNCTIONALITY
+router.post('/like', function (req, res){
+  let newLike = models.likes.create({
+      userId: req.session.user.id,
+      gabId: req.body.gab
+  }).then(function () {
+      res.redirect('/home');
+  });
+})
+
+//DELETE FUNCTIONALITY
+
+router.get('/delete/:id', function (req, res){
+  console.log(req.params)
+  models.gabs.destroy({where: {
+    id: req.params.id}
+  }).then(function () {
+    res.redirect('/home')
+  })
+})
 
 router.get('/logout', function (req, res) {
     req.session.destroy();

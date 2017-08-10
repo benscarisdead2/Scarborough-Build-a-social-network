@@ -45,7 +45,10 @@
     </ul>
 
 {{#gabs}}
-{{text}}<button>Like</button><hr>
+{{text}}<form action="/like" method="post">
+  <input type="hidden" name="gab" value={{id}}>
+  <input type="submit" value="like">
+</form> <a href="/delete/{{id}}">Delete</a> <hr>
 {{/gabs}}
 
 </body>

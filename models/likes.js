@@ -4,7 +4,10 @@ module.exports = function(sequelize, DataTypes) {
     dummy: DataTypes.STRING
   }, {});
 
+  likes.associate = function (models) {
+  likes.belongsTo(models.users, {as: 'user', foreignKey: 'userId'});
+  likes.belongsTo(models.gabs, {as: 'gabs', foreignKey: 'gabId'});
+  }
 
-  
   return likes;
 };
