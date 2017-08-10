@@ -40,6 +40,28 @@ function guard(req, res, next) {
     }
 };
 
+function findLikes(req, res, next) {
+  models.likes.findAll().then(function(likes) {
+    let newLikes = [];
+    for (var i = 0; i < likes.length; i++) {
+      newLikes.push(likes[i].dataValues.gabId);
+    }
+    req.likes = newLikes;
+    next();
+  })
+}
+
+function findUsers(req, res, next) {
+  models.users.findAll().then(function(users) {
+    let newUsers = [];
+    for (var i = 0; i < users.length; i++) {
+      newUsers.push(users[i].dataValues);
+    }
+    req.users = newUsers;
+    next();
+  })
+}
+
 /**************************************************************
  *
  *  route handlers
@@ -131,12 +153,26 @@ router.post('/signup', function (req, res) {
 
 // from here on we use the guard to prevent access unless
 // there is a session active
-router.get('/home', guard, function (req, res) {
+router.get('/home',guard,findLikes, function (req, res) {
+  let likes = req.likes;
     // get the name of the logged in user and find all their gabs
      // post all the gabs on their homepage
     models.gabs.findAll().then(function (gabs) {
+        for (var i = 0; i < likes.length; i++) {
+          for (var j = 0; j < gabs.length; j++) {
+            if (likes[i] == gabs[j].id) {
+              if (gabs[j].likes) {
+                gabs[j].likes ++;
+              } else {
+                gabs[j].likes = 1;
+              }
+              break;
+            }
+          }
+        }
         res.render("home", {gabs: gabs})
     })
+
 });
 
 router.get('/create', guard, function (req, res) {
@@ -172,20 +208,47 @@ router.post('/create', function (req, res) {
 
 });
 
+//SEE WHO LIKED
+router.get('/wholiked/:id', findUsers, function(req, res){
+  let users = req.users;
+  models.likes.findAll({ where: {
+      gabId: req.params.id
+  }}).then(function(likes) {
+    let whoLiked = [];
+    for (var i = 0; i < likes.length; i++) {
+      for (var j = 0; j < users.length; j++) {
+        if (users[j].id == likes[i].userId) {
+          whoLiked.push(users[j].name);
+          break;
+        }
+      }
+    }
+    res.render('wholiked', {whoLiked: whoLiked})
+  })
+})
+
 //LIKE FUNCTIONALITY
 router.post('/like', function (req, res){
-  let newLike = models.likes.create({
-      userId: req.session.user.id,
-      gabId: req.body.gab
-  }).then(function () {
-      res.redirect('/home');
-  });
+  models.likes.findOrCreate({where: {
+    userId: req.session.user.id,
+    gabId: req.body.gab
+  },
+  defaults: {
+    userId: req.session.user.id,
+    gabId: req.body.gab
+  }
+  }).then(function() {
+    res.redirect('/home');
+  })
 })
 
 //DELETE FUNCTIONALITY
 
 router.get('/delete/:id', function (req, res){
   console.log(req.params)
+  models.likes.destroy({where: {
+    gabId: req.params.id}
+  })
   models.gabs.destroy({where: {
     id: req.params.id}
   }).then(function () {

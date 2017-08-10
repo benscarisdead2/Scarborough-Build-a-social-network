@@ -47,7 +47,7 @@
 {{#gabs}}
 {{text}}<form action="/like" method="post">
   <input type="hidden" name="gab" value={{id}}>
-  <input type="submit" value="like">
+  <input type="submit" value="like"><a href='/wholiked/{{id}}'>{{likes}}</a>
 </form> <a href="/delete/{{id}}">Delete</a> <hr>
 {{/gabs}}
 
